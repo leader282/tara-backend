@@ -12,7 +12,7 @@ import profileRoute from "./routes/profile.js";
 import loveRoute from "./routes/love.js";
 import mapRoutes from "./routes/map.js";
 import { bucket } from "./firebase.js";
-import cron from "node-cron";
+// import cron from "node-cron";
 import { generateDailyQuests, dailyLoveScoreJob } from "./utils/generateDailyQuests.js";
 
 dotenv.config();

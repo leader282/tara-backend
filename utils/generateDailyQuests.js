@@ -93,7 +93,7 @@ function pickRandomQuests() {
   return shuffled.slice(0, 3);
 }
 
-async function generateDailyQuests() {
+export async function generateDailyQuests() {
   try {
     const cpins = await pool.query("SELECT cpin FROM couple_state");
 
@@ -150,7 +150,7 @@ async function generateDailyQuests() {
   }
 }
 
-async function dailyLoveScoreJob() {
+export async function dailyLoveScoreJob() {
   try {
     console.log("Running daily love score job...");
 
