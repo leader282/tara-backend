@@ -46,6 +46,15 @@ app.get("/test-bucket", async (req, res) => {
   res.json({ status: "ok", firstFile: files[0]?.name || "none" });
 });
 
+(async () => {
+  try {
+    await pool.query("select 1");
+    console.log("✅ PostgreSQL connected successfully");
+  } catch (err) {
+    console.error("❌ PostgreSQL connection failed:", err.message);
+  }
+})();
+
 
 // --- 🔥 Socket.IO Chat Logic ---
 io.on("connection", (socket) => {
