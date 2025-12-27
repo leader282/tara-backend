@@ -1,5 +1,5 @@
 import { pool } from "../db.js";
-import { calculateLoveForCpin } from "./utils/calcLove.js";
+import { calculateLoveForCpin } from "./calcLove.js";
 
 // Simple quest list – expand as needed
 const QUESTS = [
