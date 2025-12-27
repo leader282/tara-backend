@@ -13,8 +13,7 @@ import loveRoute from "./routes/love.js";
 import mapRoutes from "./routes/map.js";
 import { bucket } from "./firebase.js";
 import cron from "node-cron";
-import { calculateLoveForCpin } from "./utils/calcLove.js";
-import "./utils/generateDailyQuests.js";
+import { generateDailyQuests, dailyLoveScoreJob } from "./utils/generateDailyQuests.js";
 
 dotenv.config();
 
@@ -54,6 +53,19 @@ app.get("/test-bucket", async (req, res) => {
     console.error("❌ PostgreSQL connection failed:", err.message);
   }
 })();
+
+// --- 🗓️ Daily Quests Logic ---
+
+app.post("/run-daily-quests", async (req, res) => {
+  try {
+    await generateDailyQuests(); // call the same logic
+    await dailyLoveScoreJob(); // also run love score job
+    res.json({ success: true });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 
 
 // --- 🔥 Socket.IO Chat Logic ---
@@ -147,24 +159,24 @@ io.on("connection", (socket) => {
 });
 
 // schedule at 00:01 every day
-cron.schedule("0 0 * * *", async () => {
-  try {
-    console.log("Running daily love score job...");
+// cron.schedule("0 0 * * *", async () => {
+//   try {
+//     console.log("Running daily love score job...");
 
-    const rows = await pool.query(`SELECT cpin FROM couple_state`);
-    for (const r of rows.rows) {
-      try {
-        await calculateLoveForCpin(r.cpin);
-      } catch (err) {
-        console.error("Error calculating love for", r.cpin, err);
-      }
-    }
+//     const rows = await pool.query(`SELECT cpin FROM couple_state`);
+//     for (const r of rows.rows) {
+//       try {
+//         await calculateLoveForCpin(r.cpin);
+//       } catch (err) {
+//         console.error("Error calculating love for", r.cpin, err);
+//       }
+//     }
 
-    console.log("Done daily love score job.");
-  } catch (err) {
-    console.error("Daily love cron error", err);
-  }
-});
+//     console.log("Done daily love score job.");
+//   } catch (err) {
+//     console.error("Daily love cron error", err);
+//   }
+// });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => console.log(`🚀 Tara backend running on port ${PORT}`));

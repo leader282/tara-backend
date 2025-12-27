@@ -1,0 +1,13 @@
+name: Daily Quest Trigger
+
+on:
+  schedule:
+    - cron: "30 18 * * *"  # ITC midnight
+
+jobs:
+  daily:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call daily endpoint
+        run: |
+          curl -X POST https://tara-backend-d8sv.onrender.com/run-daily-quests/
