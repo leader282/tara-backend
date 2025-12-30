@@ -308,7 +308,7 @@ router.get("/quests/:cpin", async (req, res) => {
     `SELECT dq.quest_id, dq.quest_text, dq.date, qa.action_type, qa.user_phone
      FROM quest_actions qa
      RIGHT JOIN daily_quests dq ON qa.quest_id = dq.quest_id
-     WHERE dq.cpin = $1 AND dq.date = CURRENT_DATE
+     WHERE dq.cpin = $1
      ORDER BY dq.quest_id ASC`,
     [cpin]
   );
